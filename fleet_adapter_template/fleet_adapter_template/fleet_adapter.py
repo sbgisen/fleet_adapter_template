@@ -1,3 +1,20 @@
+#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
+
+# Copyright (c) 2024 SoftBank Corp.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Copyright 2021 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +29,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
 import argparse
-import yaml
-import time
-import threading
 import asyncio
-import nudged
+import sys
+import threading
+import time
 
+import nudged
 import rclpy
 import rclpy.node
-from rclpy.parameter import Parameter
-from rclpy.duration import Duration
-
 import rmf_adapter
-from rmf_adapter import Adapter
 import rmf_adapter.easy_full_control as rmf_easy
+import yaml
+from rclpy.duration import Duration
+from rclpy.parameter import Parameter
+from rmf_adapter import Adapter
 from rmf_adapter import Transformation
 
 from .RobotClientAPI import RobotAPI
@@ -56,6 +72,8 @@ def compute_transforms(level, coords, node=None):
 # ------------------------------------------------------------------------------
 # Main
 # ------------------------------------------------------------------------------
+
+
 def main(argv=sys.argv):
     # Init rclpy and adapter
     rclpy.init(args=argv)
@@ -130,7 +148,7 @@ def main(argv=sys.argv):
             robot_name, robot_config, node, api, fleet_handle
         )
 
-    update_period = 1.0/config_yaml['rmf_fleet'].get(
+    update_period = 1.0 / config_yaml['rmf_fleet'].get(
         'robot_state_update_frequency', 10.0
     )
 
@@ -148,7 +166,7 @@ def main(argv=sys.argv):
                 asyncio.wait(update_jobs)
             )
 
-            next_wakeup = now + Duration(nanoseconds=update_period*1e9)
+            next_wakeup = now + Duration(nanoseconds=update_period * 1e9)
             while node.get_clock().now() < next_wakeup:
                 time.sleep(0.001)
 
